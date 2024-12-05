@@ -1,0 +1,91 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<nav
+  class="flex items-center justify-between flex-wrap p-4 bg-slate-700 border-slate-400 dark:bg-slate-900"
+>
+  <!-- logo and text -->
+  <div
+    class="flex items-center flex-shrink-0 text-slate-100 mr-6 dark:text-slate-100"
+  >
+    <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
+      <Icon name="logo" class="w-6 h-6 md:w-8 md:h-8" />
+      <span
+        class="self-center text-2xl font-semibold whitespace-nowrap dark:text-slate-100"
+        >Store</span
+      >
+    </a>
+  </div>
+  <!-- end logo and text -->
+
+  <!-- mobile menu -->
+  <div class="block md:hidden">
+    <button type="button">
+      <Icon
+        name="menu"
+        id="menu-open"
+        class="items-center w-6 h-6 text-slate-100 tramsition-all duration-500 ease-in-out hover:text-sky-500"
+      />
+      <Icon
+        name="close"
+        id="menu-close"
+        class="hidden items-center w-6 h-6 text-slate-100 tramsition-all duration-500 ease-in-out hover:text-sky-500"
+      />
+    </button>
+  </div>
+
+  <div
+    id="mobile-menu"
+    class="w-full flex-grow md:flex md:items-center md:w-auto hidden"
+  >
+    <div
+      class="text-md font-medium ml-6 md:ml-0 md:flex-grow transition-all ease-in duration-500"
+    >
+      <a
+        href="/"
+        class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
+        >Home</a
+      >
+      <a
+        href="#"
+        class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
+        >Products</a
+      >
+      <a
+        href="#"
+        class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
+        >Perfil</a
+      >
+      <a
+        href="/login"
+        class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
+        >Sign In</a
+      >
+      <a
+        href="#"
+        class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
+        >Log Out</a
+      >
+    </div>
+  </div>
+</nav>
+
+<script>
+  const BtnOpen = document.querySelector("#menu-open") as HTMLButtonElement;
+  const mobileMenu = document.querySelector("#mobile-menu") as HTMLDivElement;
+  const closeIcon = document.querySelector("#menu-close") as HTMLButtonElement;
+
+  BtnOpen.addEventListener("click", () => {
+    mobileMenu.classList.remove("hidden"); // Show the menu
+    BtnOpen.classList.add("hidden"); // Hide burger icon
+    closeIcon.classList.remove("hidden"); // Show close icon
+  });
+
+  // Close the menu when close icon is clicked
+  closeIcon.addEventListener("click", () => {
+    mobileMenu.classList.add("hidden"); // Hide the menu
+    closeIcon.classList.add("hidden"); // Hide close icon
+    BtnOpen.classList.remove("hidden"); // Show burger icon
+  });
+</script>

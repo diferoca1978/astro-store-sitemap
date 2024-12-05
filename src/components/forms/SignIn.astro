@@ -1,0 +1,133 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<section class="h-screen flex justify-center items-center bg-gray-100">
+  <div
+    class="w-full max-w-xs bg-white rounded-xl shadow-lg p-5 space-y-4 dark:bg-neutral-900 dark:border dark:border-gray-300"
+  >
+    <!-- Title / Sign in with google -->
+    <div class="flex flex-col space-y-4">
+      <h1 class="text-3xl font-bold dark:text-white">Login</h1>
+      <span class="text-sm text-gray-500 dark:text-gray-300"
+        >Don't have an account?
+        <a href="/register" class="text-sky-500 hover:underline">Sign up here</a
+        >
+      </span>
+      <button
+        type="button"
+        id="btn-google"
+        class="w-full flex justify-center items-center space-x-2 bg-gray-50 border border-gray-200 py-2 px-1 rounded-lg shadow-md hover:bg-gray-100 hover:border hover:border-gray-300 dark:bg-neutral-900 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-neutral-800"
+      >
+        <Icon name="google" />
+        <span>Sign in with Google</span>
+      </button>
+    </div>
+    <!-- OR divider -->
+    <div class="flex justify-center items-center space-x-4">
+      <hr class="flex-1 border-t border-gray-300" />
+      <span
+        class="text-gray-500 text-sm font-medium uppercase dark:text-gray-200"
+        >or</span
+      >
+      <hr class="flex-1 border-t border-gray-300" />
+    </div>
+    <!-- Form  -->
+    <form class="flex flex-col space-y-4">
+      <!-- Form group -->
+      <div class="flex flex-col space-y-1">
+        <label for="email" class="dark:text-gray-200">Email address</label>
+        <input
+          type="email"
+          name="email"
+          class="w-full inline-flex justify-center placeholder:text-gray-300 border border-gray-200 rounded-md py-2 px-3 dark:text-gray-300 focus:dark:text-gray-300 focus:outline-none focus:border focus:border-sky-500 dark:bg-neutral-900 dark:border-gray-600"
+        />
+      </div>
+      <div class="flex flex-col space-y-1">
+        <label for="password" class="dark:text-gray-200">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="w-full inline-flex justify-center placeholder:text-gray-300 border border-gray-200 rounded-md py-2 px-3 focus:dark:text-gray-300 focus:outline-none focus:border focus:border-sky-500 dark:bg-neutral-900 dark:border-gray-600"
+        />
+      </div>
+      <!-- Checkbox -->
+      <div>
+        <div class="flex items-center">
+          <input
+            id="remember-me"
+            type="checkbox"
+            class="shrink-0 border-gray-200 text-sky-600 focus:ring-sky-600 dark:bg-neutral-800 dark:focus:ring-offset-sky-50"
+          />
+          <span class="ms-3 text-sm dark:text-gray-200">Remember me</span>
+        </div>
+      </div>
+      <div>
+        <button
+          type="submit"
+          id="btn-submit"
+          class="disabled w-full flex justify-center items-center space-x-2 bg-gray-50 border border-gray-200 py-2 px-1 rounded-lg shadow-md hover:bg-gray-100 hover:border hover:border-gray-300 dark:bg-neutral-900 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800"
+        >
+          <span class="font-medium">Sign in</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  import Swal from "sweetalert2";
+  import { actions } from "astro:actions";
+
+  const form = document.querySelector("form") as HTMLFormElement;
+  const btnSubmit = document.querySelector("#btn-submit") as HTMLButtonElement;
+  const btnGoogle = document.querySelector("#btn-google") as HTMLButtonElement;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    btnSubmit.setAttribute("disabled", "disabled");
+
+    const formData = new FormData(form);
+
+    const { error } = await actions.loginUser(formData);
+
+    if (error) {
+      Swal.fire({
+        toast: true,
+        position: "center",
+        icon: "error",
+        title: "Something went wrong 🙈",
+        text: "Invalid credentials",
+        showConfirmButton: false,
+        timer: 2500,
+      });
+      btnSubmit.removeAttribute("disabled");
+      return;
+    }
+
+    // TODO: Redirect
+    window.location.replace("/");
+  });
+
+  btnGoogle.addEventListener("click", async () => {
+    btnGoogle.setAttribute("disabled", "disabled");
+
+    try {
+      //! Step 1: Get the user credentials
+
+      // Step 2: Check the credentials on the backend
+
+      if (true) {
+        alert("error.message");
+        btnGoogle.removeAttribute("disabled");
+        return;
+      }
+
+      btnGoogle.innerText = "Redireccionando...";
+      window.location.replace("/protected");
+    } catch (error) {
+      console.log(error);
+      btnGoogle.removeAttribute("disabled");
+    }
+  });
+</script>
