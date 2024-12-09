@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+const { isLoggedIn } = Astro.locals;
 ---
 
 <nav
@@ -52,26 +53,41 @@ import { Icon } from "astro-icon/components";
         class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
         >Products</a
       >
-      <a
-        href="#"
-        class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
-        >Perfil</a
-      >
-      <a
-        href="/login"
-        class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
-        >Sign In</a
-      >
-      <a
-        href="#"
-        class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
-        >Log Out</a
-      >
+      {
+        isLoggedIn && (
+          <a
+            href="#"
+            class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
+          >
+            Admin
+          </a>
+        )
+      }
+      {
+        !isLoggedIn ? (
+          <a
+            href="/login"
+            class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
+          >
+            Sign In
+          </a>
+        ) : (
+          <a
+            id="logout"
+            href="#"
+            class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
+          >
+            Log Out
+          </a>
+        )
+      }
     </div>
   </div>
 </nav>
 
 <script>
+  import { signOut } from "auth-astro/client";
+
   const BtnOpen = document.querySelector("#menu-open") as HTMLButtonElement;
   const mobileMenu = document.querySelector("#mobile-menu") as HTMLDivElement;
   const closeIcon = document.querySelector("#menu-close") as HTMLButtonElement;
@@ -87,5 +103,12 @@ import { Icon } from "astro-icon/components";
     mobileMenu.classList.add("hidden"); // Hide the menu
     closeIcon.classList.add("hidden"); // Hide close icon
     BtnOpen.classList.remove("hidden"); // Show burger icon
+  });
+
+  const logOutElement = document.querySelector("#logout");
+
+  logOutElement?.addEventListener("click", async () => {
+    await signOut();
+    window.location.href = "/";
   });
 </script>
