@@ -1,6 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
-const { isLoggedIn } = Astro.locals;
+const { isLoggedIn, isAdmin } = Astro.locals;
 ---
 
 <nav
@@ -54,9 +54,9 @@ const { isLoggedIn } = Astro.locals;
         >Products</a
       >
       {
-        isLoggedIn && (
+        isAdmin && (
           <a
-            href="#"
+            href="/admin/dashboard"
             class="block text-slate-100 hover:text-slate-400 mt-4 md:inline-block md:mt-0 md:ml-6"
           >
             Admin

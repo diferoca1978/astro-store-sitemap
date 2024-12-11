@@ -7,22 +7,23 @@ export const onRequest = defineMiddleware(async ({ url, locals, redirect, reques
 
   const session = await getSession(request)
   const isLoggedIn = !!session // The double negation means that have a session.
-  const user = session?.user // Here we take the session object to do the things easier
+  const user = session?.user // Here we take the session object to do the things easier.
 
   locals.isLoggedIn = isLoggedIn,
     locals.user = null
+  locals.isAdmin = false
 
-  if (user) { // Here we check if there is an user
+  if (user) { // Here we check if there is an user.
     locals.user = {
-      name: user.name!, // With the exclamation character we say that always have a email an password 
-      email: user.email!
+      name: user.name!, // With the exclamation character we tell that always have a email and a password.
+      email: user.email!,
     }
 
-    locals.isAdmin = user. === 'admin'
+    locals.isAdmin = user.role_id === 'admin'
   }
 
   // Then have the control the access through the user role.
-  if (!isLoggedIn && url.pathname.startsWith('/dashboard')) {
+  if (!locals.isAdmin && url.pathname.startsWith('/dashboard')) {
     return redirect('/')
   }
 

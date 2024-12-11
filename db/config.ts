@@ -3,12 +3,12 @@ import { column, defineDb, defineTable } from 'astro:db';
 
 const user = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
+    id: column.text({ primaryKey: true, unique: true }),
     name: column.text(),
     email: column.text({ unique: true }),
     password: column.text(),
     createdAt: column.date({ default: new Date() }),
-    role: column.text({
+    role_id: column.text({
       references: () => roles.columns.id
     })
   }

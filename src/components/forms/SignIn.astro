@@ -1,5 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
+
+export const prerender = false;
 ---
 
 <section class="h-screen flex justify-center items-center bg-gray-100">
@@ -78,12 +80,11 @@ import { Icon } from "astro-icon/components";
 <script>
   import Swal from "sweetalert2";
   import { actions } from "astro:actions";
+  const { signIn } = await import("auth-astro/client");
 
   const form = document.querySelector("form") as HTMLFormElement;
   const btnSubmit = document.querySelector("#btn-submit") as HTMLButtonElement;
   const btnGoogle = document.querySelector("#btn-google") as HTMLButtonElement;
-
-  const { signIn } = await import("auth-astro/client");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -121,17 +122,15 @@ import { Icon } from "astro-icon/components";
 
     try {
       //! Step 1: Get the user credentials
+      // const resp = await signIn("google");
 
-      // Step 2: Check the credentials on the backend
+      // if (resp) {
+      //   btnGoogle.removeAttribute("disabled");
+      //   return;
+      // }
 
-      if (true) {
-        alert("error.message");
-        btnGoogle.removeAttribute("disabled");
-        return;
-      }
-
-      btnGoogle.innerText = "Redireccionando...";
-      window.location.replace("/protected");
+      btnGoogle.innerText = "Redirecting...";
+      window.location.replace("/");
     } catch (error) {
       console.log(error);
       btnGoogle.removeAttribute("disabled");
