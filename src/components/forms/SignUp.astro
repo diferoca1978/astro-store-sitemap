@@ -8,7 +8,7 @@ import { Icon } from "astro-icon/components";
   >
     <!-- Title / Sign in with google -->
     <div class="flex flex-col space-y-4">
-      <h1 class="text-3xl font-bold dark:text-white">Login</h1>
+      <h1 class="text-3xl font-bold dark:text-white">Register</h1>
       <span class="text-sm text-gray-500 dark:text-gray-300"
         >Already have an account?
         <a href="/login" class="text-sky-500 hover:underline">Sign in here</a>
@@ -39,6 +39,7 @@ import { Icon } from "astro-icon/components";
         <input
           type="text"
           name="name"
+          required
           class="w-full inline-flex justify-center placeholder:text-gray-300 border border-gray-200 rounded-md py-2 px-3 focus:dark:text-gray-300 focus:outline-none focus:border focus:border-sky-500 dark:bg-neutral-900 dark:border-gray-600"
         />
       </div>
@@ -47,6 +48,7 @@ import { Icon } from "astro-icon/components";
         <input
           type="email"
           name="email"
+          required
           class="w-full inline-flex justify-center placeholder:text-gray-300 border border-gray-200 rounded-md py-2 px-3 focus:dark:text-gray-300 focus:outline-none focus:border focus:border-sky-500 dark:bg-neutral-900 dark:border-gray-600"
         />
       </div>
@@ -55,6 +57,7 @@ import { Icon } from "astro-icon/components";
         <input
           type="password"
           name="password"
+          required
           class="w-full inline-flex justify-center placeholder:text-gray-300 border border-gray-200 rounded-md py-2 px-3 focus:dark:text-gray-300 focus:outline-none focus:border focus:border-sky-500 dark:bg-neutral-900 dark:border-gray-600"
         />
       </div>
@@ -73,7 +76,7 @@ import { Icon } from "astro-icon/components";
         <button
           type="submit"
           id="btn-submit"
-          class="w-full flex justify-center items-center space-x-2 bg-gray-50 border border-gray-200 py-2 px-1 rounded-lg shadow-md hover:bg-gray-100 hover:border hover:border-gray-300 dark:bg-neutral-900 dark:text-white dark:border-gray-600 dark:hover:bg-neutral-800"
+          class="disabled:bg-gray-300 w-full flex justify-center items-center space-x-2 bg-gray-50 border border-gray-200 py-2 px-1 rounded-lg shadow-md hover:border dark:bg-neutral-900 dark:text-white dark:border-gray-600"
         >
           <span class="font-medium">Sign up</span>
         </button>
@@ -84,7 +87,9 @@ import { Icon } from "astro-icon/components";
 
 <script>
   import { isInputError } from "astro:actions";
+  import { isActionError } from "astro:actions";
   import { actions } from "astro:actions";
+
   import Swal from "sweetalert2";
 
   const form = document.querySelector("form") as HTMLFormElement;
@@ -100,46 +105,21 @@ import { Icon } from "astro-icon/components";
     const { error } = await actions.registerUser(formData);
 
     if (error) {
-      if (isInputError(error)) {
-        if (error.fields.name) {
-          Swal.fire({
-            toast: true,
-            position: "center",
-            icon: "error",
-            title: "Something went wrong 🙈",
-            text: error.fields.name.join(", "),
-            showConfirmButton: false,
-            timer: 2500,
-          });
-        }
-        if (error.fields.email) {
-          Swal.fire({
-            toast: true,
-            position: "center",
-            icon: "error",
-            title: "Something went wrong 🙈",
-            text: error.fields.email.join(", "),
-            showConfirmButton: false,
-            timer: 2500,
-          });
-        }
-        if (error.fields.password) {
-          Swal.fire({
-            toast: true,
-            position: "center",
-            icon: "error",
-            title: "Something went wrong 🙈",
-            text: error.fields.password.join(", "),
-            showConfirmButton: false,
-            timer: 2500,
-          });
-        }
+      if (isActionError(error)) {
+        Swal.fire({
+          toast: true,
+          position: "center",
+          icon: "error",
+          title: "Something went wrong 🙈",
+          text: "Email already exists",
+          showConfirmButton: false,
+          timer: 2500,
+        });
       }
-
       btnSubmit.removeAttribute("disabled");
       return;
     }
 
-    window.location.replace("/protected");
+    window.location.replace("/");
   });
 </script>

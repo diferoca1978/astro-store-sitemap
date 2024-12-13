@@ -6,6 +6,7 @@ const noAuthRoutes = ['/login', '/register']
 export const onRequest = defineMiddleware(async ({ url, locals, redirect, request }, next) => {
 
   const session = await getSession(request)
+
   const isLoggedIn = !!session // The double negation means that have a session.
   const user = session?.user // Here we take the session object to do the things easier.
 

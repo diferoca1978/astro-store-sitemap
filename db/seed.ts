@@ -12,14 +12,14 @@ export default async function seed() {
 	const JohnDoe = {
 		id: uuidv4(),
 		name: 'John Doe',
-		email: 'jodoe.@google.com',
+		email: 'jodoe@email.com',
 		password: bcrypt.hashSync('123456'),
 		role_id: 'user'
 	}
 	const JaneDoe = {
 		id: uuidv4(),
 		name: 'Jane Doe',
-		email: 'jadoe.@google.com',
+		email: 'jadoe@google.com',
 		password: bcrypt.hashSync('654321'),
 		role_id: 'admin'
 	}
