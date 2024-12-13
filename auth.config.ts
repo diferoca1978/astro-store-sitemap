@@ -3,16 +3,17 @@ import { defineConfig } from 'auth-astro';
 import Credentials from '@auth/core/providers/credentials';
 import Google from '@auth/core/providers/google';
 import { db, eq, user } from 'astro:db';
+import bcrypt from 'bcryptjs'
 import type { AdapterUser } from '@auth/core/adapters';
 
 
 
 export default defineConfig({
   providers: [
-    // Google({
-    //   clientId: import.meta.env.AUTH_GOOGLE_ID,
-    //   clientSecret: import.meta.env.AUTH_GOOGLE_SECRET,
-    // }),
+    Google({
+      clientId: import.meta.env.AUTH_GOOGLE_ID,
+      clientSecret: import.meta.env.AUTH_GOOGLE_SECRET,
+    }),
 
     Credentials({
 
@@ -33,9 +34,9 @@ export default defineConfig({
 
         // TODO: When the insert an user into our database, make the method to validate the password.
 
-        // if (!bcrypt.compareSync(password as string, client.password)) {
-        //   throw new Error('Pass doesnot match')
-        // }
+        if (!bcrypt.compareSync(password as string, client.password)) {
+          throw new Error('Password not match')
+        }
 
         const { password: _, ...rest } = client
 
@@ -60,10 +61,7 @@ export default defineConfig({
 
     session: ({ session, token }) => {
 
-
       session.user = token.user as AdapterUser;
-
-      console.log({ UserSession: session.user });
 
       return session
     }

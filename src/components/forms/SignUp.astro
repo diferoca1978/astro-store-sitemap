@@ -116,10 +116,48 @@ import { Icon } from "astro-icon/components";
           timer: 2500,
         });
       }
+
+      if (isInputError(error)) {
+        if (error.fields.name) {
+          Swal.fire({
+            toast: true,
+            position: "center",
+            icon: "error",
+            title: "Something went wrong 🙈",
+            text: "name must be at least 3 characters",
+            showConfirmButton: false,
+            timer: 2500,
+          });
+        }
+      }
+      if (isInputError(error)) {
+        if (error.fields.password) {
+          Swal.fire({
+            toast: true,
+            position: "center",
+            icon: "error",
+            title: "Something went wrong 🙈",
+            text: "Password must be at least 6 characters",
+            showConfirmButton: false,
+            timer: 2500,
+          });
+        }
+      }
       btnSubmit.removeAttribute("disabled");
       return;
     }
 
-    window.location.replace("/");
+    Swal.fire({
+      toast: true,
+      position: "center",
+      icon: "success",
+      title: "Registration successful! Welcome aboard.",
+      showConfirmButton: false,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      footer: '<h2><a href="/login">Go to login</a></h2>',
+      color: "#00D8FF",
+      background: "#0E0E0E",
+    });
   });
 </script>

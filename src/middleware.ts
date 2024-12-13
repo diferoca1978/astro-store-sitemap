@@ -21,6 +21,7 @@ export const onRequest = defineMiddleware(async ({ url, locals, redirect, reques
     }
 
     locals.isAdmin = user.role_id === 'admin'
+
   }
 
   // Then have the control the access through the user role.

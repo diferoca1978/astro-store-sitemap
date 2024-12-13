@@ -105,9 +105,9 @@ const { isLoggedIn, isAdmin } = Astro.locals;
     BtnOpen.classList.remove("hidden"); // Show burger icon
   });
 
-  const logOutElement = document.querySelector("#logout");
+  const logOutElement = document.querySelector("#logout") as HTMLAnchorElement;
 
-  logOutElement?.addEventListener("click", async () => {
+  logOutElement.addEventListener("click", async () => {
     await signOut();
     window.location.href = "/";
   });
