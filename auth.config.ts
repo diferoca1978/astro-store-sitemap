@@ -26,8 +26,6 @@ export default defineConfig({
 
         const [client] = await db.select().from(user).where(eq(user.email, `${email}`));
 
-        console.log("🚀 ~ authorize: ~ client:", client)
-
         if (!client) {
           throw new Error('User not found')
         }

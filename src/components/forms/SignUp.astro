@@ -6,29 +6,17 @@ import { Icon } from "astro-icon/components";
   <div
     class="w-full max-w-xs bg-white rounded-xl shadow-lg p-5 space-y-4 dark:bg-neutral-900 dark:border dark:border-gray-300"
   >
-    <!-- Title / Sign in with google -->
+    <!-- Title -->
     <div class="flex flex-col space-y-4">
       <h1 class="text-3xl font-bold dark:text-white">Register</h1>
       <span class="text-sm text-gray-500 dark:text-gray-300"
         >Already have an account?
         <a href="/login" class="text-sky-500 hover:underline">Sign in here</a>
       </span>
-      <button
-        type="button"
-        id="btn-google"
-        class="w-full flex justify-center items-center space-x-2 bg-gray-50 border border-gray-200 py-2 px-1 rounded-lg shadow-md hover:bg-gray-100 hover:border hover:border-gray-300 dark:bg-neutral-900 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-neutral-800"
-      >
-        <Icon name="google" />
-        <span>Sign in with Google</span>
-      </button>
     </div>
     <!-- OR divider -->
-    <div class="flex justify-center items-center space-x-4">
+    <div class="flex justify-center items-center">
       <hr class="flex-1 border-t border-gray-300" />
-      <span
-        class="text-gray-500 text-sm font-medium uppercase dark:text-gray-200"
-        >or</span
-      >
       <hr class="flex-1 border-t border-gray-300" />
     </div>
     <!-- Form  -->
@@ -40,7 +28,7 @@ import { Icon } from "astro-icon/components";
           type="text"
           name="name"
           required
-          class="w-full inline-flex justify-center placeholder:text-gray-300 border border-gray-200 rounded-md py-2 px-3 focus:dark:text-gray-300 focus:outline-none focus:border focus:border-sky-500 dark:bg-neutral-900 dark:border-gray-600"
+          class="w-full inline-flex justify-center placeholder:text-gray-300 border border-gray-200 rounded-md py-2 px-3 focus:dark:text-gray-300 focus:outline-none focus:border focus:border-sky-500 dark:bg-neutral-900 dark:border-gray-600 dark:text-gray-300"
         />
       </div>
       <div class="flex flex-col space-y-1">
@@ -49,7 +37,7 @@ import { Icon } from "astro-icon/components";
           type="email"
           name="email"
           required
-          class="w-full inline-flex justify-center placeholder:text-gray-300 border border-gray-200 rounded-md py-2 px-3 focus:dark:text-gray-300 focus:outline-none focus:border focus:border-sky-500 dark:bg-neutral-900 dark:border-gray-600"
+          class="w-full inline-flex justify-center placeholder:text-gray-300 border border-gray-200 rounded-md py-2 px-3 focus:dark:text-gray-300 focus:outline-none focus:border focus:border-sky-500 dark:bg-neutral-900 dark:border-gray-600 dark:text-gray-300"
         />
       </div>
       <div class="flex flex-col space-y-1">
@@ -58,7 +46,7 @@ import { Icon } from "astro-icon/components";
           type="password"
           name="password"
           required
-          class="w-full inline-flex justify-center placeholder:text-gray-300 border border-gray-200 rounded-md py-2 px-3 focus:dark:text-gray-300 focus:outline-none focus:border focus:border-sky-500 dark:bg-neutral-900 dark:border-gray-600"
+          class="w-full inline-flex justify-center placeholder:text-gray-300 border border-gray-200 rounded-md py-2 px-3 focus:dark:text-gray-300 focus:outline-none focus:border focus:border-sky-500 dark:bg-neutral-900 dark:border-gray-600 dark:text-gray-300"
         />
       </div>
       <!-- Checkbox -->
@@ -94,7 +82,6 @@ import { Icon } from "astro-icon/components";
 
   const form = document.querySelector("form") as HTMLFormElement;
   const btnSubmit = document.querySelector("#btn-submit") as HTMLButtonElement;
-  const btnGoogle = document.querySelector("#btn-google") as HTMLButtonElement;
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -124,7 +111,7 @@ import { Icon } from "astro-icon/components";
             position: "center",
             icon: "error",
             title: "Something went wrong 🙈",
-            text: "name must be at least 3 characters",
+            text: "Name must be at least 3 characters",
             showConfirmButton: false,
             timer: 2500,
           });

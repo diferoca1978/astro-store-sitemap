@@ -16,6 +16,8 @@
     },
     "types": [
       "astro-icon"
-    ]
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
   }
 }

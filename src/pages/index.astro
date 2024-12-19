@@ -1,23 +1,23 @@
 ---
+import { actions } from "astro:actions";
 import Layout from "../layouts/Layout.astro";
-import { getSession } from "auth-astro/server";
 
-const session = await getSession(Astro.request);
+const { data: products, error } = await Astro.callAction(
+	actions.getProductByPage,
+	{},
+);
+
+if (error) {
+	return Astro.redirect("/");
+}
+
+console.log(products);
 
 export const prerender = false;
 ---
 
 <Layout>
-	<h1 class="text-3xl font-bold">astro Store</h1>
-
-	<h1>User logged info</h1>
-	{
-		session ? (
-			<div>
-				<pre>{JSON.stringify(session, null, 2)}</pre>
-			</div>
-		) : (
-			<h2>Whitout authentication</h2>
-		)
-	}
+	<div class="container pt-10 pb-10">
+		<h1 class="text-3xl font-bold">Astro Page</h1>
+	</div>
 </Layout>

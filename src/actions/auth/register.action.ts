@@ -2,6 +2,7 @@ import { defineAction } from 'astro:actions';
 import { db, user } from 'astro:db';
 import { z } from 'astro:schema';
 import bcrypt from 'bcryptjs'
+import { v4 as uuidv4 } from 'uuid'
 
 export const registerUser = defineAction({
   accept: 'form',
@@ -16,8 +17,10 @@ export const registerUser = defineAction({
 
     const hashedPass = bcrypt.hashSync(input.password)
 
+
     const userToRegister = {
       ...input,
+      id: uuidv4(),
       password: hashedPass
     }
 
