@@ -2,8 +2,14 @@
 import { actions } from "astro:actions";
 import Layout from "../layouts/Layout.astro";
 import { ProductList } from "@/components";
+import Pagination from "@/components/shared/Pagination.astro";
 
-const { data, error } = await Astro.callAction(actions.getProductByPage, {});
+const searchParams = Astro.url.searchParams;
+const pageParam = Number(searchParams.get("page") ?? 1);
+
+const { data, error } = await Astro.callAction(actions.getProductByPage, {
+	page: pageParam,
+});
 
 if (error) {
 	return Astro.redirect("/");
@@ -19,5 +25,7 @@ export const prerender = false;
 		<h1 class="text-3xl font-bold mb-5">Astro Page</h1>
 
 		<ProductList products={products} client:idle />
+
+		<Pagination totalPages={totalPages} />
 	</div>
 </Layout>
