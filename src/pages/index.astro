@@ -1,23 +1,23 @@
 ---
 import { actions } from "astro:actions";
 import Layout from "../layouts/Layout.astro";
+import { ProductList } from "@/components";
 
-const { data: products, error } = await Astro.callAction(
-	actions.getProductByPage,
-	{},
-);
+const { data, error } = await Astro.callAction(actions.getProductByPage, {});
 
 if (error) {
 	return Astro.redirect("/");
 }
 
-console.log(products);
+const { products, totalPages } = data;
 
 export const prerender = false;
 ---
 
 <Layout>
 	<div class="container pt-10 pb-10">
-		<h1 class="text-3xl font-bold">Astro Page</h1>
+		<h1 class="text-3xl font-bold mb-5">Astro Page</h1>
+
+		<ProductList products={products} client:idle />
 	</div>
 </Layout>

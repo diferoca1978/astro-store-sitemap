@@ -52,7 +52,7 @@ export const getProductByPage = defineAction({
     `;
 
     const { rows } = await db.run(productsQuery) // Notice that rows don't have a strict typed schema, so we need to create an interface to give it a type. The path is src/interfaces/product-with-image.interface.ts
-    console.log("🚀", rows)
+
 
     return {
       products: rows as unknown as ProductWithImages[],
