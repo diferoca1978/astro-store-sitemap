@@ -1,5 +1,5 @@
 ---
-import ProductSlideShow from "@/actions/products/productSlideShow.astro";
+import ProductSlideShow from "@/components/products/ProductSlideShow.astro";
 import Layout from "@/layouts/Layout.astro";
 import { actions } from "astro:actions";
 
@@ -20,7 +20,7 @@ export const prerender = false;
 
 <Layout title={product.title} description={product.description}>
   <!-- image={image} -->
-  <h1>{product.title}</h1>
+  <!-- <h1>{product.title}</h1> -->
 
   <div class="grid grid-cols-1 md:grid-cols-3 w-full">
     <ProductSlideShow images={images} />
