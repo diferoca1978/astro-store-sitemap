@@ -1,0 +1,14 @@
+---
+import Layout from "@/layouts/Layout.astro";
+
+const cart = Astro.cookies.get("cart");
+
+export const prerender = false;
+---
+
+<Layout title="ShoopingCart">
+  <h1>cart</h1>
+  <code>
+    {JSON.stringify(cart)}
+  </code>
+</Layout>

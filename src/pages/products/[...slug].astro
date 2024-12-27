@@ -83,6 +83,7 @@ export const prerender = false;
 </style>
 
 <script>
+  import { CartCookiesClient } from "@/utils";
   import Swal from "sweetalert2";
 
   // To select the size and change the color of the selected size
@@ -132,8 +133,7 @@ export const prerender = false;
         toast: true,
         position: "center",
         icon: "error",
-        title: "Something went wrong 🙈",
-        text: "Please select a size",
+        title: "Please select a size!!",
         showConfirmButton: false,
         timer: 2500,
       });
@@ -141,10 +141,13 @@ export const prerender = false;
 
     addToCartButton.disabled = true;
 
-    console.log({
-      id: productIdInput.value,
+    CartCookiesClient.addItem({
+      productId: productIdInput.value,
       size: size,
       quantity: quantity,
     });
+
+    //TODO: change before when we get the view transitions
+    window.location.href = "/cart";
   });
 </script>

@@ -14,9 +14,9 @@ export class CartCookiesClient {
 
     const cart = CartCookiesClient.getCart()
 
-    const itemInCar = cart.find((item) => {
-      item.productId === cartItem.productId && item.size === cartItem.size
-    })
+    const itemInCar = cart.find(
+      (item) => item.productId === cartItem.productId && item.size === cartItem.size
+    )
 
     if (itemInCar) {
       itemInCar.quantity += cartItem.quantity;
