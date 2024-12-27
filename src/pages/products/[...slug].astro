@@ -18,73 +18,73 @@ const { product, images } = data;
 export const prerender = false;
 ---
 
-<Layout title={product.title} description={product.description}>
-  <!-- image={image} -->
-  <!-- <h1>{product.title}</h1> -->
-
+<Layout>
   <div class="grid grid-cols-1 md:grid-cols-3 w-full">
     <ProductSlideShow images={images} />
 
-    <section>
-      <h2 class="text-2xl font-bold">{product.title}</h2>
-      <h2 class="font-bold">${product.price}</h2>
+    <section class="pl-5 md:pl-0">
+      <h1 class="text-3xl font-bold">{product.title}</h1>
+      <h2 class="text-2xl font-bold">${product.price}</h2>
 
-      <h3 class="mt-5">Tallas</h3>
+      <h3 class="text-2xl font-bold mt-10">Sizes</h3>
       <ul class="flex gap-3">
         {
-          product.sizes
-            .split(",")
-            .map((size) => <li data-size={size}>{size}</li>)
+          product.sizes.split(",").map((size) => {
+            <li data-size={size}>{size}</li>;
+          })
         }
       </ul>
 
-      <h3 class="mt-5">Cantidad</h3>
-      <div>
-        <button class="btn-quantity">-</button>
-        <input type="number" min="1" value="1" />
-        <button class="btn-quantity">+</button>
+      <h3 class="text-3xl font-semibold mt-5">Quantity</h3>
+      <div class="mt-5">
+        <button class="p-1 text-center items-center text-3xl hover:font-bold"
+          >-</button
+        >
+        <input
+          type="number"
+          min="1"
+          value="1"
+          class="w-14 text-center p-2 border rounded-lg"
+        />
+        <button class="p-1 text-center items-center text-2xl hover:font-bold"
+          >+</button
+        >
+
+        <button
+          class="bg-slate-800 p-2 text-center rounded-md border hover:border hover:border-sky-400 hover:shadow-lg"
+          ><span class="mx-4 text-slate-100">Add to Cart</span></button
+        >
+
+        <h3 class="mt-7 font-semibold">Description</h3>
+        <p class="prose md:prose-md mt-2 mb-10">{product.description}</p>
       </div>
 
-      <button class="mt-5 bg-blue-500 text-white p-3 w-full"
-        >Añadir al carrito</button
-      >
-
-      <h3 class="mt-10">Descripción</h3>
-      <p>{product.description}</p>
+      <input type="hidden" id="product-id" value={product.id} />
     </section>
   </div>
-
-  <input type="hidden" id="product-id" value={product.id} />
 </Layout>
 
 <style>
-  h3 {
-    @apply font-bold;
-  }
-
-  li {
-    @apply hover:underline cursor-pointer;
-  }
-
-  .selected-size {
-    @apply text-blue-500 underline font-bold transition-all;
-  }
-
-  .btn-quantity {
-    @apply w-10 text-center p-2 border border-gray-300 hover:bg-gray-100 cursor-pointer;
-  }
-
-  input {
-    @apply w-16 text-center p-2 border border-gray-300;
-  }
-
-  input[type="number"]::-webkit-outer-spin-button,
-  input[type="number"]::-webkit-inner-spin-button {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-
-  input[type="number"] {
-    -moz-appearance: textfield; /* Para Firefox */
-  }
 </style>
+
+<script>
+  const quantityInput = document.querySelector("input") as HTMLInputElement;
+  const [decrementButton, incrementButton, addToCartButton] =
+    document.querySelectorAll("button");
+
+  let quantity = 1;
+
+  incrementButton.addEventListener("click", () => {
+    quantity = Math.max(quantity + 1, 5);
+    quantityInput.value = quantity.toString();
+  });
+  decrementButton.addEventListener("click", () => {
+    quantity = Math.min(quantity - 1, 1);
+    quantityInput.value = quantity.toString();
+  });
+</script>
