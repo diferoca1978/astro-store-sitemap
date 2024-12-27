@@ -29,15 +29,19 @@ export const prerender = false;
       <h3 class="text-2xl font-bold mt-10">Sizes</h3>
       <ul class="flex gap-3">
         {
-          product.sizes.split(",").map((size) => {
-            <li data-size={size}>{size}</li>;
-          })
+          product.sizes.split(",").map((size) => (
+            <li class="cursor-pointer" data-size={size}>
+              {size}
+            </li>
+          ))
         }
       </ul>
 
       <h3 class="text-3xl font-semibold mt-5">Quantity</h3>
-      <div class="mt-5">
-        <button class="p-1 text-center items-center text-3xl hover:font-bold"
+      <div class="mt-2">
+        <button
+          id="decrement-button"
+          class="p-1 text-center items-center text-3xl hover:font-bold"
           >-</button
         >
         <input
@@ -46,11 +50,14 @@ export const prerender = false;
           value="1"
           class="w-14 text-center p-2 border rounded-lg"
         />
-        <button class="p-1 text-center items-center text-2xl hover:font-bold"
+        <button
+          id="increment-button"
+          class="p-1 text-center items-center text-2xl hover:font-bold"
           >+</button
         >
 
         <button
+          id="addCart-button"
           class="bg-slate-800 p-2 text-center rounded-md border hover:border hover:border-sky-400 hover:shadow-lg"
           ><span class="mx-4 text-slate-100">Add to Cart</span></button
         >
@@ -70,21 +77,74 @@ export const prerender = false;
     -webkit-appearance: none;
     margin: 0;
   }
+  .selected-size {
+    @apply text-sky-700 rounded-full border border-sky-700 p-1 transition-all;
+  }
 </style>
 
 <script>
+  import Swal from "sweetalert2";
+
+  // To select the size and change the color of the selected size
+  const sizeElements = document.querySelectorAll("li");
+
+  sizeElements.forEach((liElement) => {
+    liElement.addEventListener("click", () => {
+      sizeElements.forEach((s) => {
+        s.classList.remove("selected-size");
+        liElement.classList.add("selected-size");
+      });
+    });
+  });
+
+  // To manage the quantity of the product selected
+
   const quantityInput = document.querySelector("input") as HTMLInputElement;
-  const [decrementButton, incrementButton, addToCartButton] =
-    document.querySelectorAll("button");
+  const decrementButton = document.querySelector(
+    "#decrement-button",
+  ) as HTMLButtonElement;
+  const incrementButton = document.querySelector(
+    "#increment-button",
+  ) as HTMLButtonElement;
+  const addToCartButton = document.querySelector(
+    "#addCart-button",
+  ) as HTMLButtonElement;
+  const productIdInput = document.querySelector(
+    "#product-id",
+  ) as HTMLInputElement;
 
   let quantity = 1;
 
   incrementButton.addEventListener("click", () => {
-    quantity = Math.max(quantity + 1, 5);
+    quantity = Math.min(quantity + 1, 5);
     quantityInput.value = quantity.toString();
   });
   decrementButton.addEventListener("click", () => {
-    quantity = Math.min(quantity - 1, 1);
+    quantity = Math.max(quantity - 1, 1);
     quantityInput.value = quantity.toString();
+  });
+
+  addToCartButton.addEventListener("click", () => {
+    const size = document.querySelector(".selected-size")?.textContent;
+
+    if (!size) {
+      return Swal.fire({
+        toast: true,
+        position: "center",
+        icon: "error",
+        title: "Something went wrong 🙈",
+        text: "Please select a size",
+        showConfirmButton: false,
+        timer: 2500,
+      });
+    }
+
+    addToCartButton.disabled = true;
+
+    console.log({
+      id: productIdInput.value,
+      size: size,
+      quantity: quantity,
+    });
   });
 </script>
