@@ -1,14 +1,17 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { actions } from "astro:actions";
 
-const cart = Astro.cookies.get("cart");
+const { data: products, error } = await Astro.callAction(
+  actions.loadProductsFromCart,
+  {},
+);
+
+console.log(products);
 
 export const prerender = false;
 ---
 
 <Layout title="ShoopingCart">
   <h1>cart</h1>
-  <code>
-    {JSON.stringify(cart)}
-  </code>
 </Layout>
