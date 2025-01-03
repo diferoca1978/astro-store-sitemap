@@ -48,16 +48,18 @@ const fullImage = images.map((img) =>
   import Swiper from "swiper";
   import { Pagination } from "swiper/modules";
 
-  const swiper = new Swiper(".mySwiper", {
-    spaceBetween: 40,
-    effect: "fade",
+  document.addEventListener("astro:page-load", () => {
+    const swiper = new Swiper(".mySwiper", {
+      spaceBetween: 40,
+      effect: "fade",
 
-    pagination: {
-      el: ".swiper-pagination",
-      dynamicBullets: true,
-      clickable: true,
-    },
+      pagination: {
+        el: ".swiper-pagination",
+        dynamicBullets: true,
+        clickable: true,
+      },
 
-    modules: [Pagination],
+      modules: [Pagination],
+    });
   });
 </script>

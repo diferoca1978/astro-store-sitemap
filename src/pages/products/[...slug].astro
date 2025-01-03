@@ -83,71 +83,85 @@ export const prerender = false;
 </style>
 
 <script>
+  import { itemsInCart } from "@/store";
   import { CartCookiesClient } from "@/utils";
+  import { navigate } from "astro:transitions/client";
   import Swal from "sweetalert2";
 
-  // To select the size and change the color of the selected size
-  const sizeElements = document.querySelectorAll("li");
+  // To add functionality already using view transitions we may wrap all the script into a listener
 
-  sizeElements.forEach((liElement) => {
-    liElement.addEventListener("click", () => {
-      sizeElements.forEach((s) => {
-        s.classList.remove("selected-size");
-        liElement.classList.add("selected-size");
-      });
-    });
-  });
+  document.addEventListener("astro:page-load", () => {
+    // To select the size and change the color of the selected size
+    const sizeElements = document.querySelectorAll("li");
 
-  // To manage the quantity of the product selected
-
-  const quantityInput = document.querySelector("input") as HTMLInputElement;
-  const decrementButton = document.querySelector(
-    "#decrement-button",
-  ) as HTMLButtonElement;
-  const incrementButton = document.querySelector(
-    "#increment-button",
-  ) as HTMLButtonElement;
-  const addToCartButton = document.querySelector(
-    "#addCart-button",
-  ) as HTMLButtonElement;
-  const productIdInput = document.querySelector(
-    "#product-id",
-  ) as HTMLInputElement;
-
-  let quantity = 1;
-
-  incrementButton.addEventListener("click", () => {
-    quantity = Math.min(quantity + 1, 5);
-    quantityInput.value = quantity.toString();
-  });
-  decrementButton.addEventListener("click", () => {
-    quantity = Math.max(quantity - 1, 1);
-    quantityInput.value = quantity.toString();
-  });
-
-  addToCartButton.addEventListener("click", () => {
-    const size = document.querySelector(".selected-size")?.textContent;
-
-    if (!size) {
-      return Swal.fire({
-        toast: true,
-        position: "center",
-        icon: "error",
-        title: "Please select a size!!",
-        showConfirmButton: false,
-        timer: 2500,
-      });
+    if (sizeElements.length === 0) {
+      return;
     }
 
-    addToCartButton.disabled = true;
-
-    CartCookiesClient.addItem({
-      productId: productIdInput.value,
-      size: size,
-      quantity: quantity,
+    sizeElements.forEach((liElement) => {
+      liElement.addEventListener("click", () => {
+        sizeElements.forEach((s) => {
+          s.classList.remove("selected-size");
+          liElement.classList.add("selected-size");
+        });
+      });
     });
 
-    //TODO: change before when we get the view transitions
-    window.location.href = "/cart";
+    // To manage the quantity of the product selected
+
+    const quantityInput = document.querySelector("input") as HTMLInputElement;
+    const decrementButton = document.querySelector(
+      "#decrement-button",
+    ) as HTMLButtonElement;
+    const incrementButton = document.querySelector(
+      "#increment-button",
+    ) as HTMLButtonElement;
+    const addToCartButton = document.querySelector(
+      "#addCart-button",
+    ) as HTMLButtonElement;
+    const productIdInput = document.querySelector(
+      "#product-id",
+    ) as HTMLInputElement;
+
+    let quantity = 1;
+
+    incrementButton.addEventListener("click", () => {
+      quantity = Math.min(quantity + 1, 5);
+      quantityInput.value = quantity.toString();
+    });
+    decrementButton.addEventListener("click", () => {
+      quantity = Math.max(quantity - 1, 1);
+      quantityInput.value = quantity.toString();
+    });
+
+    addToCartButton.addEventListener("click", async () => {
+      const size = document.querySelector(".selected-size")?.textContent;
+
+      if (!size) {
+        return Swal.fire({
+          toast: true,
+          position: "center",
+          icon: "error",
+          title: "Please select a size!!",
+          showConfirmButton: false,
+          timer: 2500,
+        });
+      }
+
+      addToCartButton.disabled = true;
+
+      const cart = CartCookiesClient.addItem({
+        productId: productIdInput.value,
+        size: size,
+        quantity: quantity,
+      });
+
+      itemsInCart.set(cart.length);
+
+      //TODO: change before when we get the view transitions
+      // window.location.href = "/cart";
+
+      await navigate("/cart");
+    });
   });
 </script>

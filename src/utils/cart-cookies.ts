@@ -37,6 +37,8 @@ export class CartCookiesClient {
       (item) => !(item.productId === productId && item.size === size)
     )
 
-    return updatedCart
+    Cookies.set('cart', JSON.stringify(updatedCart))
+
+    return updatedCart;
   }
 }
