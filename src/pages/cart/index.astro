@@ -78,7 +78,7 @@ export const prerender = false;
           <h2>
             <>
               <div class="text-center text-3xl p-5">
-                <p>The car</p>
+                <p>The cart</p>
                 <p>is empty !! </p>
               </div>
             </>
@@ -90,14 +90,14 @@ export const prerender = false;
         products.length === 0 ? (
           // The anchor tag sets the href attribute to "javascript:history.back()", which allows the user
           //  to navigate back to previous page in their browser history when the link is clicked.
-          <a
-            href="javascript:history.back()"
-            class="hover:underline text-sky-500 text-lg capitalize"
-          >
+          <a href="/" class="hover:underline text-sky-500 text-lg capitalize">
             Back to add products
           </a>
         ) : (
-          <a href="/" class="text-sky-500 text-lg capitalize hover:underline">
+          <a
+            href="javascript:history.back()"
+            class="text-sky-500 text-lg capitalize hover:underline"
+          >
             Continue shopping
           </a>
         )
@@ -139,6 +139,7 @@ export const prerender = false;
 </Layout>
 
 <script>
+  import { itemsInCart } from "@/store";
   import { CartCookiesClient } from "@/utils";
   import { navigate } from "astro:transitions/client";
 
@@ -150,7 +151,8 @@ export const prerender = false;
         const productId = target.dataset.id ?? "";
         const size = target.dataset.size ?? "";
 
-        CartCookiesClient.removeItem(productId, size);
+        const cart = CartCookiesClient.removeItem(productId, size);
+        itemsInCart.set(cart.length);
 
         navigate("/cart");
       });
