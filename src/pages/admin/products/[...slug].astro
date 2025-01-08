@@ -279,6 +279,7 @@ export const prerender = false;
 
   document.addEventListener("astro:page-load", () => {
     const form = document.querySelector("form") as HTMLFormElement;
+    const sizeButtons = document.querySelectorAll(".btn-size");
 
     // Here we're evaluate if doesn't have a form do nothing
     if (!form) {
@@ -288,11 +289,18 @@ export const prerender = false;
     form.addEventListener("submit", (e) => {
       e.preventDefault();
 
+      // To take the selected sizes
+      const selectedSizes = Array.from(sizeButtons)
+        .filter((btn) => btn.classList.contains("active"))
+        .map((btn) => btn.textContent?.trim())
+        .join(",");
+
       // To take the form values
       const formData = new FormData(form);
+      formData.set("sizes", selectedSizes);
 
       const formValues = Object.fromEntries(formData.entries());
-      console.log("🚀 ~ form.addEventListener ~ formValues:", formValues);
+      console.log("🚀", formValues);
     });
   });
 </script>
