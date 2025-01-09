@@ -28,7 +28,6 @@ export const getProductByPage = defineAction({
       }
     }
 
-
     //* This is the one way to query that we are going to use to get the products.*//
 
     // const products = await db
@@ -38,8 +37,20 @@ export const getProductByPage = defineAction({
     //   .limit(limit)
     //   .offset((page - 1) * 12)
 
-    //* This is the second way (best way) to query that we are going to use to get the products.*//
 
+    /**
+     * This is the second way (best way) to query that we are going to use to get the products.
+     * @remarks
+     * Retrieves a paginated list of products along with their associated images.
+     * 
+     * The query selects all columns from the `product` table and includes a subquery
+     * that concatenates up to two images per product into a single string, separated by commas.
+     * 
+     * @param {number} page - The current page number for pagination.
+     * @param {number} limit - The number of products to display per page.
+     * 
+     * @returns {Promise<Array>} A promise that resolves to an array of products, each with a maximum of two associated images.
+     */
     const productsQuery = sql`
     SELECT a.*,
     (SELECT GROUP_CONCAT(image, ',') 
@@ -53,9 +64,24 @@ export const getProductByPage = defineAction({
 
     const { rows } = await db.run(productsQuery) // Notice that rows don't have a strict typed schema, so we need to create an interface to give it a type. The path is src/interfaces/product-with-image.interface.ts
 
+    /**
+     * Maps through the rows of products and returns an array of products with images.
+     * If a product does not have an image, it assigns a default image 'no-image.png'.
+     *
+     * @returns {ProductWithImages[]} - An array of products with images.
+     */
+    const products = rows.map(product => {
+
+      return {
+        ...product,
+        images: product.images ? product.images : 'no-image.png'
+      }
+
+    }) as unknown as ProductWithImages[];
+
 
     return {
-      products: rows as unknown as ProductWithImages[],
+      products: products,
       totalPages: totalPages,
 
     }
