@@ -1,21 +1,25 @@
 import { loginUser, logout, registerUser } from './auth';
 import { loadProductsFromCart } from './cart/load-products-from-cart';
+import { createUpdateProduct } from './products/create-update-product.action';
 import { getProductBySlug } from './products/get-product-by-slug-action';
 import { getProductByPage } from './products/get-products-by-page-action';
 
 export const server = {
-  // Auth
+  /**--- Auth ---*/
   loginUser,
   logout,
   registerUser,
 
-  // Products
+  /**--- Products ---*/
   getProductByPage,
   getProductBySlug,
 
 
-  //cart
-  loadProductsFromCart
+  /**--- Cart ---*/
+  loadProductsFromCart,
 
+  /**--- Admin ---*/
+  // Products
+  createUpdateProduct
 
 };
