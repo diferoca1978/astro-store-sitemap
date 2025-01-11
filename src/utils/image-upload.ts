@@ -20,19 +20,24 @@ cloudinary.config({
 
 export class ImageUpload {
   static async Upload(file: File) {
+    try {
+      const buffer = await file.arrayBuffer();
+      const base64Image = Buffer.from(buffer).toString('base64');
+      const imageType = file.type.split('/')[1];
 
-    const buffer = await file.arrayBuffer();
-    const base64Image = Buffer.from(buffer).toString('base64');
-    const imageType = file.type.split('/')[1];
 
+      const resp = await cloudinary.uploader.upload(
+        `data:image/${imageType};base64,${base64Image}`, {
+        folder: 'astro-store-products'
+      }
+      );
 
-    const uploadResult = await cloudinary.uploader.upload(
-      `data:image/${imageType};base64,${base64Image}`, {
-      public_id: 'astro-store-products'
+      return resp.secure_url
+    } catch (error) {
+      console.log(error);
+      throw new Error(JSON.stringify(error))
     }
-    );
 
-    return uploadResult.secure_url
 
   }
 }

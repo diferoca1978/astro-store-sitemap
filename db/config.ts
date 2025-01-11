@@ -1,5 +1,11 @@
 import { column, defineDb, defineTable } from 'astro:db';
 
+const roles = defineTable({
+  columns: {
+    id: column.text({ primaryKey: true }),
+    name: column.text()
+  }
+})
 
 const user = defineTable({
   columns: {
@@ -14,12 +20,6 @@ const user = defineTable({
   }
 })
 
-const roles = defineTable({
-  columns: {
-    id: column.text({ primaryKey: true }),
-    name: column.text()
-  }
-})
 
 const product = defineTable({
   columns: {
@@ -30,7 +30,7 @@ const product = defineTable({
     sizes: column.text(),
     slug: column.text(),
     stock: column.number(),
-    tags: column.text({ unique: true }),
+    tags: column.text(),
     title: column.text(),
     type: column.text(),
 
@@ -42,7 +42,10 @@ const productImage = defineTable({
   columns: {
     id: column.text({ primaryKey: true }),
     image: column.text(),
-    productId: column.text({ references: () => product.columns.id })
+    productId: column.text({
+      references: () => product.columns.id,
+      onDelete: 'cascade'
+    })
   }
 })
 

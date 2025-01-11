@@ -1,7 +1,7 @@
 
 import { ImageUpload } from '@/utils/image-upload';
 import { defineAction } from 'astro:actions';
-import { db, eq, product } from 'astro:db';
+import { db, eq, product, productImage } from 'astro:db';
 import { z } from 'astro:schema';
 import { getSession } from 'auth-astro/server';
 import { v4 as uuidv4 } from 'uuid'
@@ -80,22 +80,51 @@ export const createUpdateProduct = defineAction({
       ...rest
     };
 
-    //create
+    const queries: any = []
+
+    /*---Create---*/
     if (!form.id) {
-      await db.insert(product).values(productToCreate)
+      queries.push(
+        db.insert(product).values(productToCreate)
+      )
     } else {
-      //update
-      await db.update(product).set(productToCreate).where(eq(product.id, id))
+      /*---Update---*/
+      queries.push(
+        db.update(product).set(productToCreate).where(eq(product.id, id))
+      )
     }
 
-    //insert images
-    console.log({ imageFiles });
-    imageFiles?.forEach(async (imgFile) => {
+    /*---Insert images---*/
 
-      if (imgFile.size <= 0) return;
+    const secureUrls: string[] = []
 
-      const url = await ImageUpload.Upload(imgFile)
+    if (form.imageFiles && form.imageFiles.length > 0 && form.imageFiles[0].size > 0) {
+
+      const urls = await Promise.all(
+        form.imageFiles.map(file => ImageUpload.Upload(file))
+      );
+
+      secureUrls.push(...urls)
+
+    }
+
+    secureUrls.forEach(imgUrl => {
+      const imgObj = {
+        id: uuidv4(),
+        image: imgUrl,
+        productId: productToCreate.id
+      }
+
+      queries.push(db.insert(productImage).values(imgObj));
     })
+
+    //* The code below has been refactorized because only upload one image.
+    // imageFiles?.forEach(async (imgFile) => {
+    //   if (imgFile.size <= 0) return;
+    //   const url = await ImageUpload.Upload(imgFile)
+    // })
+
+    await db.batch(queries);
 
     return productToCreate;
   }
