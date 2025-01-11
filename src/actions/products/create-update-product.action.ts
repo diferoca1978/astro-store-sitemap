@@ -118,7 +118,7 @@ export const createUpdateProduct = defineAction({
       queries.push(db.insert(productImage).values(imgObj));
     })
 
-    //* The code below has been refactorized because only upload one image.
+    //* The code below has been refactorized because only upload one image. The best way is the code above wich make a batch transaction
     // imageFiles?.forEach(async (imgFile) => {
     //   if (imgFile.size <= 0) return;
     //   const url = await ImageUpload.Upload(imgFile)
