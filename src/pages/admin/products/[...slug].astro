@@ -228,6 +228,7 @@ export const prerender = false;
               type="file"
               accept="image/*"
               multiple
+              class="hidden"
             />
           </label>
         </div>
@@ -289,6 +290,14 @@ export const prerender = false;
   document.addEventListener("astro:page-load", () => {
     const form = document.querySelector("form") as HTMLFormElement;
     const sizeButtons = document.querySelectorAll(".btn-size");
+    const btnDeleteImg = document.querySelectorAll(".btn-delete-image");
+    const lblSelectedFiles = document.querySelector(
+      "#lbl-selected-files",
+    ) as HTMLParagraphElement;
+    const dropZone = document.querySelector("#drop-zone") as HTMLLabelElement;
+    const fileInput = document.querySelector(
+      "#file-upload",
+    ) as HTMLInputElement;
 
     // Here we're evaluate if doesn't have a form ? do nothing
     if (!form) {
@@ -336,7 +345,6 @@ export const prerender = false;
        If the deletion is successful, it removes the corresponding table row from the DOM.
        If there is an error during deletion, it logs the error to the console.
      */
-    const btnDeleteImg = document.querySelectorAll(".btn-delete-image");
 
     btnDeleteImg.forEach((btn) => {
       btn.addEventListener("click", async (e) => {
@@ -354,5 +362,68 @@ export const prerender = false;
         document.querySelector(`${trId}`)?.remove();
       });
     });
+
+    // Drag & Drop images
+
+    /** To prevent the default behavior of Pharagraph element and input element*/
+
+    const preventDefaults = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    const highlight = (e: DragEvent) => {
+      dropZone.classList.add("border-blue-500", "bg-blue-50");
+    };
+
+    const unHighlight = (e: DragEvent) => {
+      dropZone.classList.remove("border-blue-500", "bg-blue-50");
+    };
+
+    const createFileList = (files: File[]): FileList => {
+      const dataTrasfer = new DataTransfer();
+      files.forEach((file) => dataTrasfer.items.add(file));
+      return dataTrasfer.files;
+    };
+
+    const handleFiles = (files: FileList) => {
+      const validFiles = Array.from(files).filter((file) =>
+        file.type.startsWith("image/"),
+      );
+
+      if (fileInput && validFiles.length > 0) {
+        fileInput.files = createFileList(validFiles);
+      }
+
+      lblSelectedFiles.innerHTML = `<strong>${validFiles.length} archivos seleccionados</strong>`;
+    };
+
+    (["dragenter", "dragover", "dragleave", "drop"] as const).forEach(
+      (eventName) => {
+        dropZone.addEventListener(eventName, preventDefaults);
+        document.body.addEventListener(eventName, preventDefaults);
+      },
+    );
+
+    (["dragenter", "dragover"] as const).forEach((eventName) => {
+      dropZone.addEventListener(eventName, highlight);
+    });
+
+    (["dragleave", "drop"] as const).forEach((eventName) => {
+      dropZone.addEventListener(eventName, unHighlight);
+    });
+
+    // Sólo imágenes
+    dropZone.addEventListener("drop", (e) => {
+      const files = e.dataTransfer?.files;
+
+      if (files) {
+        handleFiles(files);
+      }
+    });
+
+    // fin del astro:load
+
+    // End of Astro:load
   });
 </script>
