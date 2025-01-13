@@ -37,6 +37,26 @@ export class ImageUpload {
       console.log(error);
       throw new Error(JSON.stringify(error))
     }
+  }
+
+  // To delete an image or images
+
+  static async Delete(image: string) {
+
+    try {
+      const folderName = 'astro-store-products';
+      const imgName = image.split('/').pop() ?? '';
+      const imgId = `${folderName}/${imgName.split('.')[0]}`
+
+      const resp = await cloudinary.uploader.destroy(imgId)
+      console.log("🚀 ~ ImageUpload ~ Delete ~ resp:", resp)
+
+      return true;
+    } catch (error) {
+      console.log("🚀 ~ ImageUpload ~ Delete ~ error:", error)
+      return false;
+
+    }
 
 
   }

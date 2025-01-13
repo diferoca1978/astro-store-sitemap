@@ -20,7 +20,7 @@ export const prerender = false;
 
 <Layout>
   <div class="grid grid-cols-1 md:grid-cols-3 w-full">
-    <ProductSlideShow images={images} />
+    <ProductSlideShow images={images.map((img) => img.image)} />
 
     <section class="pl-5 md:pl-0">
       <h1 class="text-3xl font-bold">{product.title}</h1>
