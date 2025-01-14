@@ -13,8 +13,10 @@ import db from '@astrojs/db';
 
 import react from '@astrojs/react';
 
+import sitemap from '@astrojs/sitemap';
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [icon(), tailwind(), auth(), db(), react()],
+  integrations: [icon(), tailwind(), auth(), db(), react(), sitemap()],
   adapter: netlify()
 });
