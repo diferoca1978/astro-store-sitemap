@@ -48,7 +48,7 @@ function toActionProxy(actionCallback = {}, aggregatedPath = "") {
 }
 async function handleAction(param, path, context) {
   {
-    const { getAction } = await import('./get-action_BVH4rx6N.mjs');
+    const { getAction } = await import('./get-action_hx0etpl2.mjs');
     const action = await getAction(path);
     if (!action) throw new Error(`Action not found: ${path}`);
     return action.bind(context)(param);

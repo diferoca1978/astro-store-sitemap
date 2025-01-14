@@ -2,7 +2,7 @@ import { f as createAstro, g as createComponent, r as renderTemplate, i as addAt
 import 'kleur/colors';
 import 'clsx';
 /* empty css                             */
-import { $ as $$Icon } from './Icon_CiSoxhat.mjs';
+import { $ as $$Icon } from './Icon_DI5fFAfR.mjs';
 import { jsx, Fragment, jsxs } from 'react/jsx-runtime';
 import { atom } from 'nanostores';
 import Cookies from 'js-cookie';

@@ -7,7 +7,7 @@ import 'kleur/colors';
 import 'clsx';
 import 'cookie';
 import 'html-escaper';
-import { getAction } from './get-action_BVH4rx6N.mjs';
+import { getAction } from './get-action_hx0etpl2.mjs';
 
 const ACTION_API_CONTEXT_SYMBOL = Symbol.for("astro.actionAPIContext");
 const formContentTypes = ["application/x-www-form-urlencoded", "multipart/form-data"];

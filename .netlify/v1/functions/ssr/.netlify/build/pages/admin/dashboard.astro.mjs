@@ -1,8 +1,8 @@
 /* empty css                                        */
 import { f as createAstro, g as createComponent, r as renderTemplate, k as renderComponent, m as maybeRenderHead, i as addAttribute } from '../../chunks/astro/server_G_32Yixg.mjs';
 import 'kleur/colors';
-import { $ as $$Layout } from '../../chunks/Layout_WC1iOH2i.mjs';
-import { a as actions } from '../../chunks/_astro_actions_DTr5lW3A.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_CNRUd_IR.mjs';
+import { a as actions } from '../../chunks/_astro_actions_CzZ-tsCn.mjs';
 import { $ as $$Pagination } from '../../chunks/Pagination_BAK1zqoq.mjs';
 import 'js-cookie';
 import { F as Formatter } from '../../chunks/formatter_COXD278a.mjs';
