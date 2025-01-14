@@ -17,6 +17,9 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [icon(), tailwind(), auth(), db(), react(), sitemap()],
+  site: 'https://sitemap-astro-store.netlify.app/',
+  integrations: [icon(), tailwind(), auth(), db(), react(), sitemap({
+    filter: (page) => page !== "https://sitemap-astro-store.netlify.app/admin/dashboard/"
+  })],
   adapter: netlify()
 });

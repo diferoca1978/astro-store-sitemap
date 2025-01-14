@@ -1,0 +1,161 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { Formatter } from "@/utils";
+import { actions } from "astro:actions";
+
+const { data: products, error } = await Astro.callAction(
+  actions.loadProductsFromCart,
+  {},
+);
+
+if (error || !products) {
+  return Astro.redirect("/");
+}
+
+const total = products.reduce(
+  (acc, product) => acc + product.price * product.quantity,
+  0,
+);
+
+export const prerender = false;
+---
+
+<Layout title="ShoopingCart">
+  <h1
+    class="bg-gradient-to-tl from-sky-500 via-blue-700 to-sky-200 bg-clip-text text-transparent"
+  >
+    Cart
+  </h1>
+
+  <section class="grid grid-cols-1 sm:grid-cols-2">
+    <!-- Products -->
+    <div class="order-2 sm:order-1">
+      {products.length > 0 && <h2>Products</h2>}
+
+      {
+        products.length > 0 ? (
+          products.map((product) => (
+            <div class="flex gap-4 mt-4 items-center mb-4">
+              <img src={product.image} alt={product.title} class="w-20 h-20" />
+
+              <div class="flex items-center gap-2">
+                <div>
+                  <a href={`/products/${product.slug}`} class="hover:underline">
+                    {product.title}
+                  </a>
+                  <p>${product.price}</p>
+                  <p>
+                    Size: <span class="font-semibold">{product.size}</span>
+                  </p>
+                  <p>
+                    Quantity:
+                    <span class="font-semibold">{product.quantity}</span>
+                  </p>
+                </div>
+                <div>
+                  <button
+                    data-id={product.productId}
+                    data-size={product.size}
+                    class="btn-delete bg-sky-500 hover:bg-red-600 p-0.5 rounded-full"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width={24}
+                      height={24}
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="#fff"
+                        d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <h2>
+            <>
+              <div class="text-center text-3xl p-5">
+                <p>The cart</p>
+                <p>is empty !! </p>
+              </div>
+            </>
+          </h2>
+        )
+      }
+
+      {
+        products.length === 0 ? (
+          // The anchor tag sets the href attribute to "javascript:history.back()", which allows the user
+          //  to navigate back to previous page in their browser history when the link is clicked.
+          <a href="/" class="hover:underline text-sky-500 text-lg capitalize">
+            Back to add products
+          </a>
+        ) : (
+          <a
+            href="javascript:history.back()"
+            class="text-sky-500 text-lg capitalize hover:underline"
+          >
+            Continue shopping
+          </a>
+        )
+      }
+    </div>
+
+    <!-- Total -->
+    <div
+      class="bg-black h-[330px] text-white p-6 rounded-lg shadow-lg order-1 ml-2 mt-2"
+    >
+      <h2 class="text-lg font-semibold mb-4">Total summary</h2>
+
+      <div class="flex justify-between text-gray-400 mb-2">
+        <span>Delivery</span>
+        <span>Free</span>
+      </div>
+
+      <div class="flex justify-between text-gray-400 mb-4">
+        <span>SubTotal </span>
+        <span>{Formatter.currency(total)}</span>
+      </div>
+      <div class="flex justify-between text-gray-400 mb-4">
+        <span>Tax</span>
+        <span>{Formatter.currency(total * 0.15)}</span>
+      </div>
+
+      <div class="flex justify-between text-xl font-bold">
+        <span>Total</span>
+        <span>{Formatter.currency(total * 1.15)}</span>
+      </div>
+
+      <button
+        class="mt-10 w-full bg-blue-700 text-gray-300 py-3 rounded-lg hover:bg-gray-600 transition-all"
+      >
+        PAY
+      </button>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import { itemsInCart } from "@/store";
+  import { CartCookiesClient } from "@/utils";
+  import { navigate } from "astro:transitions/client";
+
+  document.addEventListener("astro:page-load", () => {
+    const deleteButtons = document.querySelectorAll(".btn-delete");
+    deleteButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const target = event.currentTarget as HTMLButtonElement;
+        const productId = target.dataset.id ?? "";
+        const size = target.dataset.size ?? "";
+
+        const cart = CartCookiesClient.removeItem(productId, size);
+        itemsInCart.set(cart.length);
+
+        navigate("/cart");
+      });
+    });
+  });
+</script>

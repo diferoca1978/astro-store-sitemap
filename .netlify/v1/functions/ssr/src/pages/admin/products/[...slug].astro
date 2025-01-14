@@ -1,0 +1,427 @@
+---
+import ProductImage from "@/components/products/ProductImage.astro";
+import ProductSlideShow from "@/components/products/ProductSlideShow.astro";
+import Layout from "@/layouts/Layout.astro";
+import { actions } from "astro:actions";
+
+const { slug } = Astro.params;
+
+const { data, error } = await Astro.callAction(
+  actions.getProductBySlug,
+  slug ?? "",
+);
+
+if (error) {
+  return Astro.redirect("/404");
+}
+
+const { product, images } = data;
+
+export const prerender = false;
+---
+
+<Layout title="Product maintenance">
+  <h1>{product.title}</h1>
+  <a href="javascript:history.back()" class="text-blue-500">← Back</a>
+
+  <form class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <!-- The input below is used to send the id, so we can update a product -->
+    <input type="hidden" name="id" value={product.id} />
+
+    <!-- General specs -->
+    <div class="mt-2">
+      <h2 class="text-lg font-semibold">Generasl specs</h2>
+
+      <!-- Title -->
+      <div class="mb-4">
+        <label for="title" class="block">Title</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={product.title}
+          class="w-full p-2 border border-gray-300 rounded"
+        />
+      </div>
+
+      <!-- Slug -->
+      <div class="mb-4">
+        <label for="slug" class="block">Slug</label>
+        <input
+          type="text"
+          id="slug"
+          name="slug"
+          value={product.slug}
+          class="w-full p-2 border border-gray-300 rounded"
+        />
+      </div>
+
+      <!-- Description -->
+      <div class="mb-4">
+        <label for="description" class="block">Descriptión</label>
+        <textarea
+          id="description"
+          name="description"
+          class="w-full p-2 border border-gray-300 rounded"
+          rows="8">{product.description}</textarea
+        >
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <!-- Price -->
+        <div class="mb-4">
+          <label for="price" class="block">Price</label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            value={product.price}
+            class="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+
+        <!-- Inventory -->
+        <div class="mb-4">
+          <label for="stock" class="block">inventory</label>
+          <input
+            type="number"
+            id="stock"
+            name="stock"
+            value={product.stock}
+            class="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+      </div>
+
+      <!-- Labels -->
+      <div class="mb-4">
+        <label for="tags" class="block"
+          >Etiquetas <small class="text-gray-500">(Separated by coma)</small
+          ></label
+        >
+        <input
+          type="text"
+          id="tags"
+          name="tags"
+          value={product.tags}
+          class="w-full p-2 border border-gray-300 rounded"
+        />
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Gender -->
+        <div class="mb-4">
+          <label for="gender" class="block">Sex</label>
+          <select
+            class="w-full p-2 border border-gray-300 rounded"
+            name="gender"
+          >
+            <option value="">[ Select ]</option>
+            {
+              ["men", "women", "unisex", "kid"].map((gender) => (
+                <option
+                  value={gender}
+                  class="capitalize"
+                  selected={gender === product.gender}
+                >
+                  {gender.toUpperCase()}
+                </option>
+              ))
+            }
+          </select>
+        </div>
+
+        <!-- Type -->
+        <div class="mb-4">
+          <label for="tags" class="block">Tipo</label>
+          <select class="w-full p-2 border border-gray-300 rounded" name="type">
+            <option value="">[ Select ]</option>
+            {
+              ["shirts", "shirt", "pants", "hats", "hoodies"].map((type) => (
+                <option
+                  value={type}
+                  class="capitalize"
+                  selected={type === product.type}
+                >
+                  {type.toUpperCase()}
+                </option>
+              ))
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Sizes -->
+
+      <!--  This combination of inline event handling and conditional class assignment allows for dynamic and interactive UI elements. When a user clicks on the element, it toggles the 'active' class, and the initial class state is determined by whether the size is part of the product.sizes array. -->
+      <div class="mb-4">
+        <label for="sizes" class="block">Sizes</label>
+        <div class="flex">
+          {
+            ["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
+              <button
+                type="button"
+                class="btn-size"
+                onclick="this.classList.toggle('active')"
+                class:list={
+                  product.sizes.split(",").includes(size) ? "active" : ""
+                }
+              >
+                {size}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Images -->
+    <div>
+      <!-- File upload -->
+      <div class="mt-4">
+        <!-- Save  -->
+        <div class="flex justify-end">
+          <button class="bg-blue-500 mb-5 p-2 rounded text-white"
+            >Save product</button
+          >
+        </div>
+
+        <!-- File input -->
+        <div class="flex items-center justify-center w-full">
+          <label
+            for="file-upload"
+            class="flex flex-col items-center justify-center w-full h-52 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
+            id="drop-zone"
+          >
+            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="48"
+                height="48"
+                viewBox="0 0 48 48"
+                ><rect width="48" height="48" fill="none"></rect><path
+                  fill="none"
+                  stroke="#2897fd"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.5 11.5a3 3 0 0 1 3-3h8.718a4 4 0 0 1 2.325.745l4.914 3.51a4 4 0 0 0 2.325.745H40.5a3 3 0 0 1 3 3v20a3 3 0 0 1-3 3h-33a3 3 0 0 1-3-3z"
+                ></path><path
+                  fill="none"
+                  stroke="#2897fd"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M24 33.5v-14m6.167 6.167L24 19.5l-6.167 6.167"></path></svg
+              >
+              <p class="mb-2 text-sm text-gray-500" id="lbl-selected-files">
+                <span class="font-semibold">Click here </span> or drag the files
+              </p>
+              <p class="text-xs text-gray-500">
+                SVG, PNG, JPG or GIF (max. 800x400px)
+              </p>
+            </div>
+
+            <!-- class="hidden" -->
+            <!-- accept only images -->
+            <input
+              id="file-upload"
+              name="imageFiles"
+              type="file"
+              accept="image/*"
+              multiple
+              class="hidden"
+            />
+          </label>
+        </div>
+
+        <!-- Slideshow -->
+        <ProductSlideShow images={images.map((img) => img.image)} />
+
+        <table class="w-full border mb-5">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              images.map(({ image, id }) => (
+                <tr class="border" id={id}>
+                  <td class="flex justify-center">
+                    <ProductImage
+                      src={image}
+                      alt={product.title}
+                      className="w-16 h-16 rounded"
+                    />
+                  </td>
+                  <td class="text-center">
+                    <button type="button" data-id={id} class="btn-delete-image">
+                      X
+                    </button>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>
+
+  <style>
+    .btn-size,
+    .btn-delete-image {
+      @apply rounded border cursor-pointer border-gray-300 w-10 h-10 mr-4 hover:bg-blue-300 hover:text-white transition-all;
+    }
+
+    .active {
+      @apply bg-blue-500 text-white;
+    }
+  </style>
+</Layout>
+
+<script>
+  // Remenber: when we're working with view transitions we must use the Astro page load event to ensure that the script runs on the first page load and after every navigation
+
+  import { actions } from "astro:actions";
+  import { navigate } from "astro:transitions/client";
+  import Swal from "sweetalert2";
+
+  document.addEventListener("astro:page-load", () => {
+    const form = document.querySelector("form") as HTMLFormElement;
+    const sizeButtons = document.querySelectorAll(".btn-size");
+    const btnDeleteImg = document.querySelectorAll(".btn-delete-image");
+    const lblSelectedFiles = document.querySelector(
+      "#lbl-selected-files",
+    ) as HTMLParagraphElement;
+    const dropZone = document.querySelector("#drop-zone") as HTMLLabelElement;
+    const fileInput = document.querySelector(
+      "#file-upload",
+    ) as HTMLInputElement;
+
+    // Here we're evaluate if doesn't have a form ? do nothing
+    if (!form) {
+      return;
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // To take the selected sizes
+      const selectedSizes = Array.from(sizeButtons)
+        .filter((btn) => btn.classList.contains("active"))
+        .map((btn) => btn.textContent?.trim())
+        .join(",");
+
+      // To take the form values
+      const formData = new FormData(form);
+      formData.set("sizes", selectedSizes);
+
+      const formValues = Object.fromEntries(formData.entries());
+      console.log("🚀", formValues);
+
+      const { data, error } = await actions.createUpdateProduct(formData);
+
+      if (error) {
+        return Swal.fire({
+          toast: true,
+          position: "center",
+          icon: "error",
+          title: "Something went wrong 🙈",
+          text: error.message,
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      }
+      navigate(`/admin/products/${data.slug}`);
+    });
+
+    // Delete images
+
+    /**
+     * Adds click event listeners to all elements with the class "btn-delete-image".
+       When a button is clicked, it retrieves the data-id attribute from the button,
+       and calls the deleteProductImg action with the id.
+       If the deletion is successful, it removes the corresponding table row from the DOM.
+       If there is an error during deletion, it logs the error to the console.
+     */
+
+    btnDeleteImg.forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        const id = btn.getAttribute("data-id");
+        if (!id) return;
+
+        const { error } = await actions.deleteProductImg(id);
+
+        if (error) {
+          console.log("🚀 ~ btn.addEventListener ~ error:", error);
+          return;
+        }
+
+        const trId = `#${CSS.escape(id)}`; // This is a built-in function that scapes any special character in a string to make if safe for use in CSS selector
+        document.querySelector(`${trId}`)?.remove();
+      });
+    });
+
+    // Drag & Drop images
+
+    /** To prevent the default behavior of Pharagraph element and input element*/
+
+    const preventDefaults = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    const highlight = (e: DragEvent) => {
+      dropZone.classList.add("border-blue-500", "bg-blue-50");
+    };
+
+    const unHighlight = (e: DragEvent) => {
+      dropZone.classList.remove("border-blue-500", "bg-blue-50");
+    };
+
+    const createFileList = (files: File[]): FileList => {
+      const dataTrasfer = new DataTransfer();
+      files.forEach((file) => dataTrasfer.items.add(file));
+      return dataTrasfer.files;
+    };
+
+    const handleFiles = (files: FileList) => {
+      const validFiles = Array.from(files).filter((file) =>
+        file.type.startsWith("image/"),
+      );
+
+      if (fileInput && validFiles.length > 0) {
+        fileInput.files = createFileList(validFiles);
+      }
+
+      lblSelectedFiles.innerHTML = `<strong>${validFiles.length} archivos seleccionados</strong>`;
+    };
+
+    (["dragenter", "dragover", "dragleave", "drop"] as const).forEach(
+      (eventName) => {
+        dropZone.addEventListener(eventName, preventDefaults);
+        document.body.addEventListener(eventName, preventDefaults);
+      },
+    );
+
+    (["dragenter", "dragover"] as const).forEach((eventName) => {
+      dropZone.addEventListener(eventName, highlight);
+    });
+
+    (["dragleave", "drop"] as const).forEach((eventName) => {
+      dropZone.addEventListener(eventName, unHighlight);
+    });
+
+    // Sólo imágenes
+    dropZone.addEventListener("drop", (e) => {
+      const files = e.dataTransfer?.files;
+
+      if (files) {
+        handleFiles(files);
+      }
+    });
+
+    // End of Astro:load
+  });
+</script>

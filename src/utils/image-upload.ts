@@ -28,7 +28,7 @@ export class ImageUpload {
 
       const resp = await cloudinary.uploader.upload(
         `data:image/${imageType};base64,${base64Image}`, {
-        folder: 'astro-store-products'
+        folder: 'astro-store-sitemap'
       }
       );
 

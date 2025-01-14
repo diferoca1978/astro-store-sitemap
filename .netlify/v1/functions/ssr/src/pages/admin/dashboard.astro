@@ -1,0 +1,76 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { actions } from "astro:actions";
+import Pagination from "@/components/shared/Pagination.astro";
+import { Formatter } from "@/utils";
+import ProductImage from "@/components/products/ProductImage.astro";
+
+const searchParams = Astro.url.searchParams;
+const pageParam = Number(searchParams.get("page") ?? 1);
+
+const { data, error } = await Astro.callAction(actions.getProductByPage, {
+  page: pageParam,
+});
+
+if (error) {
+  return Astro.redirect("/");
+}
+
+const { products, totalPages } = data;
+
+export const prerender = false;
+---
+
+<Layout title=" Admin dashboard">
+  <h1>Dashboard</h1>
+  <p>Product list</p>
+
+  <div class="flex justify-end">
+    <a
+      href="/admin/products/new"
+      class="bg-blue-500 text-center text-slate-100 rounded-lg p-2 hover:bg-blue-700 transition-all"
+      >Create new product</a
+    >
+  </div>
+
+  <table class="w-full mt-3">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {
+        products.map((product) => (
+          <tr>
+            {/* TODO: This will generate an error if not exists images (for instance when we want to create a product) */}
+            <td class="text-center border">
+              <ProductImage
+                src={product.images.split(",")[0]}
+                alt={product.title}
+                className="w-16 h-16"
+              />
+            </td>
+            <td class="border p-2">
+              <a
+                class="hover:underline"
+                href={`/admin/products/${product.slug}`}
+              >
+                {product.title}
+              </a>
+            </td>
+            <td class="text-center border">
+              {Formatter.currency(product.price)}
+            </td>
+            <td class="text-center border">{product.stock}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+  <Pagination totalPages={totalPages} />
+</Layout>
