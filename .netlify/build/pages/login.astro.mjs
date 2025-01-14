@@ -1,7 +1,7 @@
 /* empty css                                     */
 import { g as createComponent, r as renderTemplate, m as maybeRenderHead, k as renderComponent, l as renderScript } from '../chunks/astro/server_G_32Yixg.mjs';
 import 'kleur/colors';
-import { $ as $$Icon } from '../chunks/Icon_DI5fFAfR.mjs';
+import { $ as $$Icon } from '../chunks/Icon_DNAGLm3o.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$SignIn = createComponent(async ($$result, $$props, $$slots) => {

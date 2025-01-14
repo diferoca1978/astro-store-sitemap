@@ -3,8 +3,8 @@ import { f as createAstro, g as createComponent, r as renderTemplate, k as rende
 import 'kleur/colors';
 import { $ as $$ProductImage } from '../../../chunks/ProductImage_DMsIu7hr.mjs';
 import { $ as $$ProductSlideShow } from '../../../chunks/ProductSlideShow_D5g-UT6G.mjs';
-import { $ as $$Layout } from '../../../chunks/Layout_CNRUd_IR.mjs';
-import { a as actions } from '../../../chunks/_astro_actions_CzZ-tsCn.mjs';
+import { $ as $$Layout } from '../../../chunks/Layout_CYsLghR_.mjs';
+import { a as actions } from '../../../chunks/_astro_actions_POsePjrc.mjs';
 /* empty css                                        */
 export { renderers } from '../../../renderers.mjs';
 

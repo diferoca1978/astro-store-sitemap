@@ -1,10 +1,10 @@
 /* empty css                                     */
 import { f as createAstro, g as createComponent, r as renderTemplate, k as renderComponent, l as renderScript, m as maybeRenderHead, i as addAttribute, n as Fragment } from '../chunks/astro/server_G_32Yixg.mjs';
 import 'kleur/colors';
-import { $ as $$Layout } from '../chunks/Layout_CNRUd_IR.mjs';
+import { $ as $$Layout } from '../chunks/Layout_CYsLghR_.mjs';
 import 'js-cookie';
 import { F as Formatter } from '../chunks/formatter_COXD278a.mjs';
-import { a as actions } from '../chunks/_astro_actions_CzZ-tsCn.mjs';
+import { a as actions } from '../chunks/_astro_actions_POsePjrc.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro = createAstro("https://sitemap-astro-store.netlify.app/");

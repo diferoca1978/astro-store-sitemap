@@ -2,7 +2,7 @@ import { f as createAstro, g as createComponent, r as renderTemplate, i as addAt
 import 'kleur/colors';
 import 'clsx';
 /* empty css                             */
-import { $ as $$Icon } from './Icon_DI5fFAfR.mjs';
+import { $ as $$Icon } from './Icon_DNAGLm3o.mjs';
 import { jsx, Fragment, jsxs } from 'react/jsx-runtime';
 import { atom } from 'nanostores';
 import Cookies from 'js-cookie';
@@ -86,8 +86,12 @@ const $$Astro = createAstro("https://sitemap-astro-store.netlify.app/");
 const $$Layout = createComponent(($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$Layout;
-  const { title } = Astro2.props;
-  return renderTemplate`<html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="sitemap" href="/sitemap-index.xml"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator"${addAttribute(Astro2.generator, "content")}><title>${title}</title>${renderComponent($$result, "ClientRouter", $$ClientRouter, {})}${renderHead()}</head> <body> <!-- <NavBar2 /> --> ${renderComponent($$result, "FloatNavBar", $$FloatNavBar, {})} <main class="min-h-screen max-w-6xl m-auto px-4 mt-10"> ${renderSlot($$result, $$slots["default"])} </main> ${renderComponent($$result, "Footer", $$Footer, {})} ${renderScript($$result, "/home/diego/Astro-Projects/astro-store-sitemap/src/layouts/Layout.astro?astro&type=script&index=0&lang.ts")}</body></html>`;
+  const {
+    title = "Astro Store",
+    description = "My store",
+    image = "https://sitemap-astro-store.netlify.app/images/products/7654393-00-A_2_2000.jpg"
+  } = Astro2.props;
+  return renderTemplate`<html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="sitemap" href="/sitemap-index.xml"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator"${addAttribute(Astro2.generator, "content")}><title>${title}</title><!-- Meta tags --><meta name="title"${addAttribute(title, "content")}><meta name="description"${addAttribute(description, "content")}><!-- Open Graph / Facebook --><meta property="og:title"${addAttribute(title, "content")}><meta property="og:url"${addAttribute(Astro2.url, "content")}><meta property="og:description"${addAttribute(description, "content")}><meta property="og:type" content="website"><meta property="og:image"${addAttribute(image, "content")}><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url"${addAttribute(Astro2.url, "content")}><meta property="twitter:title"${addAttribute(title, "content")}><meta property="twitter:description"${addAttribute(description, "content")}><meta property="twitter:image"${addAttribute(image, "content")}>${renderComponent($$result, "ClientRouter", $$ClientRouter, {})}${renderHead()}</head> <body> <!-- <NavBar2 /> --> ${renderComponent($$result, "FloatNavBar", $$FloatNavBar, {})} <main class="min-h-screen max-w-6xl m-auto px-4 mt-10"> ${renderSlot($$result, $$slots["default"])} </main> ${renderComponent($$result, "Footer", $$Footer, {})} ${renderScript($$result, "/home/diego/Astro-Projects/astro-store-sitemap/src/layouts/Layout.astro?astro&type=script&index=0&lang.ts")}</body></html>`;
 }, "/home/diego/Astro-Projects/astro-store-sitemap/src/layouts/Layout.astro", void 0);
 
 export { $$Layout as $ };
